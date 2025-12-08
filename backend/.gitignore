@@ -1,0 +1,25 @@
+# Node
+node_modules/
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs
+
+# Cache
+.cache/
+dist/
+build/
+
+# Editor files
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Docker
+*.pid
+coverage/

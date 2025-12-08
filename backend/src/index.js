@@ -19,7 +19,7 @@ app.locals.pool = pool;
 app.use('/articles', articlesRoute);
 
 
-app.get('/', (req, res) => {
+app.get('/', (_, res) => {
   res.send('Hello World!');
 });
 
