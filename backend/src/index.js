@@ -5,9 +5,9 @@ const cors = require('cors');
 const { Pool } = require('pg');
 const articlesRoute = require('./routes/articles');
 
+const app = express();
 app.use(cors());
 app.use(express.json());
-const app = express();
 
 const connectionString = process.env.DATABASE_URL || 'postgres://user:password:blogia';
 const pool = new Pool({
