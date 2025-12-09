@@ -4,5 +4,5 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 ENV NODE_ENV=production
-EXPOSE 4000
+EXPOSE 3000
 CMD ["node", "src/index.js"]
