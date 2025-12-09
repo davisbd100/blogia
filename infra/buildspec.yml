@@ -1,0 +1,32 @@
+env:
+  variables:
+    AWS_REGION: "us-east-1"
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging
+      - aws --version
+      - $(aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com)
+      - echo Build started on `date`
+
+  build:
+    commands:
+      - echo Building container...
+      - docker build -t blogia-backend ./backend
+      - docker build -t blogia-frontend ./frontend
+
+      - echo tagging
+      - docker tag blogia-backend:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/blogia-backend:latest
+      - docker tag blogia-frontend:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/blogia-frontend:latest
+
+  post_build:
+    commands:
+      - echo Pushing images
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/blogia-backend:latest
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/blogia-frontend:latest
+      - echo Build completed on `date`
+
+artifacts:
+  files:
+    - '**/*'
