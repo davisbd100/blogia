@@ -1,34 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
+import { API_BASE_URL } from './utils/config';
+import { Link } from 'react-router-dom';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [articles, setArticles] = useState([]);
 
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/articles`)
+      .then(res => res.json())
+      .then(data => setArticles(data))
+      .catch(err => {
+        console.error(err);
+        setArticles([]);
+      })
+  
+      return () => {
+        setArticles([])
+      }
+  }, [])
+  
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div style={{padding:20, fontFamily:'Arial'}}>
+      <h1>Blogia</h1>
+      <p>Lista de artículos:</p>
+      <ul>
+        {articles.map(a => (
+          <li key={a.id}>
+            <Link to={`/articles/${a.id}`}>{a.title}</Link>
+            {' '}<small>({new Date(a.created_at).toLocaleDateString()})</small>
+            <div><em>{a.summary}</em></div>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
