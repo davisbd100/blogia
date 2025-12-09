@@ -14,7 +14,12 @@ services:
   backend:
     build: ../backend
     environment:
-      DATABASE_URL: postgres://username:password@db:5432/blogiadb
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: username
+      DB_PASSWORD: password
+      DB_NAME: blogiadb
+      HF_API_KEY: "Your key"
       PORT: 4000
     depends_on:
       - db
@@ -25,6 +30,10 @@ services:
     build: ../frontend
     depends_on:
       - backend
+    environment:
+      ASSET_DIR: /usr/share/nginx/html
+      APP_PREFIX: PREFIX_
+      PREFIX_API_URL: "http://localhost:4000"
     ports:
       - "3000:80"
 
