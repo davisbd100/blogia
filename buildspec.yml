@@ -3,13 +3,16 @@ version: 0.2
 env:
   variables:
     AWS_REGION: "us-east-1"
+    DOCKER_SECRET_VALUE: "arn:aws:secretsmanager:us-east-1:793476552304:secret:prod/docker-login-HeMLRu"
 
 phases:
   pre_build:
     commands:
       - echo Logging
       - aws --version
-      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      - DOCKER_HUB_USERNAME=$(echo $DOCKER_SECRET_VALUE | jq -r '.DOCKER_HUB_USERNAME')
+      - DOCKER_HUB_PASSWORD=$(echo $DOCKER_SECRET_VALUE | jq -r '.DOCKER_HUB_PASSWORD')
+      - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
       - echo Build started on `date`
 
   build:
@@ -25,6 +28,7 @@ phases:
   post_build:
     commands:
       - echo Pushing images
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/blogia-backend:latest
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/blogia-frontend:latest
       - echo Build completed on `date`
