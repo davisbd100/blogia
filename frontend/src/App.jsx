@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import { API_BASE_URL } from './utils/config';
 import { Link } from 'react-router-dom';
 
 function App() {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
-    fetch(`/articles`)
+    fetch(`${API_BASE_URL}/articles`)
       .then(res => res.json())
       .then(data => setArticles(data))
       .catch(err => {
