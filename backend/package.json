@@ -7,12 +7,13 @@
     "dev": "nodemon src/index.js"
   },
   "dependencies": {
-    "express": "^5.2.1",
-    "pg": "^8.16.3",
-    "node-fetch": "^3.3.2",
+    "@huggingface/inference": "^4.13.5",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "node-cron": "^4.2.1"
+    "express": "^5.2.1",
+    "node-cron": "^4.2.1",
+    "node-fetch": "^3.3.2",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
