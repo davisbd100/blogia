@@ -3,6 +3,7 @@ version: 0.2
 env:
   variables:
     AWS_REGION: "us-east-1"
+  secrets-manager:
     DOCKER_SECRET_VALUE: "arn:aws:secretsmanager:us-east-1:793476552304:secret:prod/docker-login-HeMLRu"
 
 phases:
