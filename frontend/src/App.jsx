@@ -24,6 +24,7 @@ function App() {
     <div style={{padding:20, fontFamily:'Arial'}}>
       <h1>Blogia</h1>
       <p>Lista de artículos:</p>
+      <p>This is an example</p>
       <ul>
         {articles.map(a => (
           <li key={a.id}>

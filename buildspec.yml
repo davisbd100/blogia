@@ -5,6 +5,7 @@ env:
     AWS_REGION: "us-east-1"
   secrets-manager:
     DOCKER_SECRET_VALUE: "arn:aws:secretsmanager:us-east-1:793476552304:secret:prod/docker-login-HeMLRu"
+    INSTANCE_SECRET_VALUE: "arn:aws:secretsmanager:us-east-1:793476552304:secret:instanceId-djCUC1"
 
 phases:
   pre_build:
@@ -32,8 +33,10 @@ phases:
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/blogia-backend:latest
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/blogia-frontend:latest
+      - INSTANCE_ID=$(echo $instance | jq -r '.instance')
+      - COMMAND_ID=$(aws ssm send-command --instance-ids "i-02be7ab34cb3f0ea4" --document-name "AWS-RunShellScript" --parameters 'commands=["bash /home/ubuntu/app/deploy.sh"]' --query 'Command.CommandId' --output text)
+      - aws ssm wait command-executed --command-id $COMMAND_ID --instance-id "i-02be7ab34cb3f0ea4"
       - echo Build completed on `date`
-      - aws ssm send-command --instance-ids "i-02be7ab34cb3f0ea4" --document-name "AWS-RunShellScript" --parameters 'commands=["bash /home/ubuntu/app/deploy.sh"]' --comment "Executed by CodePipeline"
 
 artifacts:
   files:
