@@ -33,6 +33,10 @@ phases:
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/blogia-backend:latest
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/blogia-frontend:latest
       - echo Build completed on `date`
+      - aws ssm send-command \
+        --document-name "AWS-RunShellScript" \
+        --targets "Key=webserver,Values=i-02be7ab34cb3f0ea4" \
+        --parameters commands=["bash /home/ubuntu/app/deploy.sh"]
 
 artifacts:
   files:
