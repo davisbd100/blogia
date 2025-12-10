@@ -15,15 +15,7 @@ It includes:
 
 ## 🏗️ System Architecture
 
-User ↔ React (Frontend)
-          ↓
-     Node.js API
-          ↓
-   PostgreSQL Database
-          ↓↑
-AI Generation (HuggingFace API)
-          ↓
-Automatic Daily Cron Job (node-cron)
+User → React (Frontend) → NodeJS API → PostgreSQL → AI Generation → Automatic Dailty cron
 
 CI/CD Pipeline:
 GitHub → CodePipeline → CodeBuild → ECR → EC2 (Docker)
